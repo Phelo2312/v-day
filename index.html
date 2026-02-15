@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do You Love Me?</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #ffdde1;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem 4rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4b6e;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        #yesBtn {
+            background-color: #ff4b6e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.3);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background-color: #ff2e56;
+        }
+
+        #noBtn {
+            background-color: #e0e0e0;
+            color: #333;
+            position: relative;
+            /* Changed to relative initially, will be absolute when moving */
+        }
+
+        /* Hidden class for toggling visibility */
+        .hidden {
+            display: none;
+        }
+
+        #videoContainer {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 */
+            height: 0;
+            width: 80%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #backBtn {
+            margin-top: 20px;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card" id="questionCard">
+            <h1>Do you love me?</h1>
+            <div class="buttons">
+                <button id="yesBtn">Yes ❤️</button>
+                <button id="noBtn">No 💔</button>
+            </div>
+        </div>
+
+        <div class="hidden" id="videoContainer">
+            <h1>Yay! I knew it! 😍</h1>
+            <div class="video-wrapper">
+                <!-- Replace VIDEO_ID with your actual YouTube video ID -->
+                <iframe id="loveVideo" width="560" height="315" src="" title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            <button id="backBtn">Back</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const questionCard = document.getElementById('questionCard');
+            const videoContainer = document.getElementById('videoContainer');
+            const loveVideo = document.getElementById('loveVideo');
+            const backBtn = document.getElementById('backBtn');
+
+            // Video ID to play (Replace this with any YouTube video ID you want)
+            // Example: 'izGwDsrQ1eQ' is George Michael - Careless Whisper
+            // Example: 'CatVideoID'
+            const videoId = 'izGwDsrQ1eQ';
+
+
+            // Move 'No' button on hover
+            noBtn.addEventListener('mouseover', () => {
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            });
+
+            // Also move on click just in case (for mobile mostly, though hover is tricky on mobile)
+            noBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            });
+
+            // Show video on 'Yes' click
+            yesBtn.addEventListener('click', () => {
+                questionCard.style.display = 'none';
+                videoContainer.classList.remove('hidden');
+                videoContainer.style.display = 'flex';
+                // Auto-play the video
+                loveVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            });
+
+            // Back button to reset
+            backBtn.addEventListener('click', () => {
+                videoContainer.style.display = 'none';
+                videoContainer.classList.add('hidden');
+                questionCard.style.display = 'block';
+                loveVideo.src = ''; // Stop video
+
+                // Reset No button position
+                noBtn.style.position = 'relative';
+                noBtn.style.left = 'auto';
+                noBtn.style.top = 'auto';
+            });
+        });
+    </script>
+</body>
+
+</html>
