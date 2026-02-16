@@ -199,6 +199,29 @@
                 transform: translateX(0);
             }
         }
+
+        #continueBtn {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        #continueBtn:hover {
+            transform: scale(1.1);
+            background-color: #45a049;
+        }
+
+        #happyYesBtn {
+            background-color: #ff4b6e;
+            color: white;
+        }
+
+        #happyNoBtn {
+            background-color: #e0e0e0;
+            color: #333;
+            position: relative;
+        }
     </style>
 </head>
 
@@ -226,7 +249,30 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <button id="backBtn">Back</button>
+            <!-- Added class for styling -->
+            <button id="continueBtn" class="hidden">Continue ➡</button>
+            <button id="backBtn" class="hidden">Back</button>
+        </div>
+
+        <!-- Happy Question Section -->
+        <div class="card hidden" id="happyQuestionSection">
+            <h1>Are you happy? 🥰</h1>
+            <div class="buttons">
+                <button id="happyYesBtn">Yes 💖</button>
+                <button id="happyNoBtn">No 😢</button>
+            </div>
+        </div>
+
+        <!-- Drawing Section -->
+        <div class="card hidden" id="drawingSection">
+            <h1>Please complete the drawing 🎨</h1>
+            <div class="image-container">
+                <!-- Placeholder image - User should replace src -->
+                <div
+                    style="background: #f0f0f0; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 15px; margin: 0 auto; border: 2px dashed #ccc;">
+                    <p style="color: #888;">Your Photo Here</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -314,6 +360,54 @@
                 noBtn.style.position = 'relative';
                 noBtn.style.left = 'auto';
                 noBtn.style.top = 'auto';
+            });
+
+            // Post-Video Flow
+            const continueBtn = document.getElementById('continueBtn');
+            const happyQuestionSection = document.getElementById('happyQuestionSection');
+            const happyYesBtn = document.getElementById('happyYesBtn');
+            const happyNoBtn = document.getElementById('happyNoBtn');
+            const drawingSection = document.getElementById('drawingSection');
+
+            // Show Continue button when video ends
+            loveVideo.addEventListener('ended', () => {
+                continueBtn.classList.remove('hidden');
+                backBtn.classList.add('hidden'); // Hide back button to focus on flow
+            });
+
+            // Continue to "Are you happy?"
+            continueBtn.addEventListener('click', () => {
+                videoContainer.style.display = 'none';
+                videoContainer.classList.add('hidden');
+                happyQuestionSection.style.display = 'block'; // Ensure it's visible as a block
+                happyQuestionSection.classList.remove('hidden');
+            });
+
+            // Happy "Yes" -> Show Drawing
+            happyYesBtn.addEventListener('click', () => {
+                happyQuestionSection.style.display = 'none';
+                drawingSection.style.display = 'block';
+                drawingSection.classList.remove('hidden');
+            });
+
+            // Happy "No" -> Run away logic (Reused)
+            function moveButton(btn) {
+                const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+                btn.style.position = 'absolute';
+                btn.style.left = `${x}px`;
+                btn.style.top = `${y}px`;
+            }
+
+            happyNoBtn.addEventListener('mouseover', () => {
+                moveButton(happyNoBtn);
+                happyNoBtn.innerText = "No 😠";
+            });
+
+            happyNoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                moveButton(happyNoBtn);
+                happyNoBtn.innerText = "No 😠";
             });
         });
     </script>
