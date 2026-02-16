@@ -120,11 +120,96 @@
             background-color: #333;
             color: white;
         }
+
+        /* Password Modal Styles */
+        #passwordScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #ffdde1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        #passwordScreen h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4b6e;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        #passwordInput {
+            padding: 15px 25px;
+            font-size: 1.5rem;
+            border: 2px solid #ff4b6e;
+            border-radius: 50px;
+            outline: none;
+            text-align: center;
+            color: #ff4b6e;
+            margin-bottom: 2rem;
+            width: 200px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #passwordInput::placeholder {
+            color: #ffb7c5;
+        }
+
+        #submitPasswordBtn {
+            background-color: #ff4b6e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.3);
+        }
+
+        #submitPasswordBtn:hover {
+            transform: scale(1.1);
+            background-color: #ff2e56;
+        }
+
+        .error-shake {
+            animation: shake 0.5s;
+            border-color: #ff0000 !important;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+
+            75% {
+                transform: translateX(-10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div id="passwordScreen">
+        <h2>Enter Password ❤️</h2>
+        <input type="password" id="passwordInput" placeholder="Password" />
+        <button id="submitPasswordBtn">Unlock</button>
+    </div>
+
+    <div class="container" style="display: none;">
         <div class="card" id="questionCard">
             <h1>Do you love me?</h1>
             <div class="buttons">
@@ -153,8 +238,37 @@
             const videoContainer = document.getElementById('videoContainer');
             const loveVideo = document.getElementById('loveVideo');
             const backBtn = document.getElementById('backBtn');
+            const passwordScreen = document.getElementById('passwordScreen');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const container = document.querySelector('.container');
 
-            // No external video ID needed for local file
+            // Password Logic
+            function checkPassword() {
+                const password = passwordInput.value;
+                if (password === '12525') {
+                    passwordScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        passwordScreen.style.display = 'none';
+                        container.style.display = 'flex';
+                    }, 500); // Wait for transition
+                } else {
+                    passwordInput.classList.add('error-shake');
+                    setTimeout(() => {
+                        passwordInput.classList.remove('error-shake');
+                        passwordInput.value = '';
+                    }, 500);
+                }
+            }
+
+            submitPasswordBtn.addEventListener('click', checkPassword);
+
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+
 
 
             // Move 'No' button on hover
