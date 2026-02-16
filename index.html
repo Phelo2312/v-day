@@ -529,7 +529,6 @@
 
                     // Play boom sound if we had one, but for now just visual
 
-                    // After boom (1s), show photo and drawing area
                     // After boom (1s), show text first, then photo
                     setTimeout(() => {
                         boomEffect.style.display = 'none';
@@ -551,6 +550,7 @@
                         colorPalette.style.display = 'none';
 
                         finalMessage.classList.add('hidden');
+                        finalMessage.style.display = 'none';
 
                         // After delay, show photo and palette
                         setTimeout(() => {
@@ -563,6 +563,7 @@
                             colorPalette.classList.add('photo-reveal');
 
                             finalMessage.classList.remove('hidden');
+                            finalMessage.style.display = 'block'; // Restore display
 
                             // Initialize canvas after image is visible
                             setTimeout(setupCanvas, 100);
