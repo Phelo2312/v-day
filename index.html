@@ -338,10 +338,10 @@
         <div class="container hidden" id="surpriseSection"
             style="display: none; flex-direction: column; align-items: center;">
             <div id="giftBox">🎁</div>
-            <div class="hidden" id="boomEffect">💥 BOOM! 💥</div>
+            <div class="hidden" id="boomEffect">💥 b7bk ya zozaty awii 💥</div>
 
             <div id="drawingArea" class="hidden"
-                style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+                style="display: none; position: relative; flex-direction: column; align-items: center; width: 100%;">
                 <h2
                     style="color: #ff4b6e; font-family: 'Dancing Script', cursive; font-size: 2.5rem; margin-bottom: 1rem;">
                     Please complete the drawing ✏️</h2>
@@ -351,7 +351,7 @@
                     <canvas id="drawingCanvas"
                         style="position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none;"></canvas>
                 </div>
-                <h1 id="finalMessage" style="margin-top: 20px;">I Love You! ❤️</h1>
+                <h1 id="finalMessage" style="margin-top: 20px;">I Love You za2toty! ❤️</h1>
             </div>
         </div>
 
@@ -493,6 +493,7 @@
                     setTimeout(() => {
                         boomEffect.style.display = 'none';
                         const drawingArea = document.getElementById('drawingArea');
+                        drawingArea.style.display = 'flex';
                         drawingArea.classList.remove('hidden');
 
                         // Initialize canvas after image is visible to get correct dimensions
