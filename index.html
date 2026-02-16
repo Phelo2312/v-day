@@ -292,6 +292,36 @@
             to {
                 opacity: 1;
             }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Color Palette */
+        #colorPalette {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .color-btn.active {
+            border: 2px solid #333;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -351,6 +381,16 @@
                     <canvas id="drawingCanvas"
                         style="position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none;"></canvas>
                 </div>
+
+                <div id="colorPalette" class="hidden">
+                    <div class="color-btn active" style="background-color: #ff4b6e;" data-color="#ff4b6e"></div>
+                    <div class="color-btn" style="background-color: #FFC107;" data-color="#FFC107"></div>
+                    <div class="color-btn" style="background-color: #4CAF50;" data-color="#4CAF50"></div>
+                    <div class="color-btn" style="background-color: #2196F3;" data-color="#2196F3"></div>
+                    <div class="color-btn" style="background-color: #9C27B0;" data-color="#9C27B0"></div>
+                    <div class="color-btn" style="background-color: #000000;" data-color="#000000"></div>
+                </div>
+
                 <h1 id="finalMessage" style="margin-top: 20px;">I Love You za2toty! ❤️</h1>
             </div>
         </div>
@@ -490,14 +530,44 @@
                     // Play boom sound if we had one, but for now just visual
 
                     // After boom (1s), show photo and drawing area
+                    // After boom (1s), show text first, then photo
                     setTimeout(() => {
                         boomEffect.style.display = 'none';
                         const drawingArea = document.getElementById('drawingArea');
+                        const canvasContainer = document.getElementById('canvasContainer');
+                        const colorPalette = document.getElementById('colorPalette');
+                        const finalMessage = document.getElementById('finalMessage');
+
+                        // Show drawing area container
                         drawingArea.style.display = 'flex';
                         drawingArea.classList.remove('hidden');
 
-                        // Initialize canvas after image is visible to get correct dimensions
-                        setTimeout(setupCanvas, 100);
+                        // Hide internal elements initially for the sequence
+                        // Force display none to override CSS ID/inline styles
+                        canvasContainer.classList.add('hidden');
+                        canvasContainer.style.display = 'none';
+
+                        colorPalette.classList.add('hidden');
+                        colorPalette.style.display = 'none';
+
+                        finalMessage.classList.add('hidden');
+
+                        // After delay, show photo and palette
+                        setTimeout(() => {
+                            canvasContainer.classList.remove('hidden');
+                            canvasContainer.style.display = 'inline-block'; // Restore display
+                            canvasContainer.classList.add('photo-reveal');
+
+                            colorPalette.classList.remove('hidden');
+                            colorPalette.style.display = 'flex'; // Restore display
+                            colorPalette.classList.add('photo-reveal');
+
+                            finalMessage.classList.remove('hidden');
+
+                            // Initialize canvas after image is visible
+                            setTimeout(setupCanvas, 100);
+                        }, 1500);
+
                     }, 800);
                 }, 2000);
             });
@@ -506,6 +576,21 @@
             const drawingCanvas = document.getElementById('drawingCanvas');
             const ctx = drawingCanvas.getContext('2d');
             let isDrawing = false;
+            let currentColor = '#ff4b6e';
+
+            // Color Palette Logic
+            const colorBtns = document.querySelectorAll('.color-btn');
+            colorBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all
+                    colorBtns.forEach(b => b.classList.remove('active'));
+                    // Add active to clicked
+                    btn.classList.add('active');
+                    // Set color
+                    currentColor = btn.getAttribute('data-color');
+                    ctx.strokeStyle = currentColor;
+                });
+            });
 
             function setupCanvas() {
                 const img = document.getElementById('surprisePhoto');
@@ -514,7 +599,7 @@
                 drawingCanvas.height = img.clientHeight;
 
                 // Style settings for drawing
-                ctx.strokeStyle = '#ff4b6e';
+                ctx.strokeStyle = currentColor;
                 ctx.lineWidth = 5;
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
