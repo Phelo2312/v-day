@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do You Love Me?</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #ffdde1;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem 4rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4b6e;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        #yesBtn {
+            background-color: #ff4b6e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.3);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background-color: #ff2e56;
+        }
+
+        #noBtn {
+            background-color: #e0e0e0;
+            color: #333;
+            position: relative;
+            /* Changed to relative initially, will be absolute when moving */
+        }
+
+        /* Hidden class for toggling visibility */
+        .hidden {
+            display: none;
+        }
+
+        #videoContainer {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 */
+            height: 0;
+            width: 80%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #backBtn {
+            margin-top: 20px;
+            background-color: #333;
+            color: white;
+        }
+
+        /* Password Modal Styles */
+        #passwordScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #ffdde1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        #passwordScreen h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4b6e;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        #passwordInput {
+            padding: 15px 25px;
+            font-size: 1.5rem;
+            border: 2px solid #ff4b6e;
+            border-radius: 50px;
+            outline: none;
+            text-align: center;
+            color: #ff4b6e;
+            margin-bottom: 2rem;
+            width: 200px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #passwordInput::placeholder {
+            color: #ffb7c5;
+        }
+
+        #submitPasswordBtn {
+            background-color: #ff4b6e;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 110, 0.3);
+        }
+
+        #submitPasswordBtn:hover {
+            transform: scale(1.1);
+            background-color: #ff2e56;
+        }
+
+        .error-shake {
+            animation: shake 0.5s;
+            border-color: #ff0000 !important;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+
+            75% {
+                transform: translateX(-10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        #continueBtn {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        #continueBtn:hover {
+            transform: scale(1.1);
+            background-color: #45a049;
+        }
+
+        #happyYesBtn {
+            background-color: #ff4b6e;
+            color: white;
+        }
+
+        #happyNoBtn {
+            background-color: #e0e0e0;
+            color: #333;
+            position: relative;
+        }
+
+        /* Surprise Section Styles */
+        #giftBox {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .shake {
+            animation: shakeBox 0.5s infinite;
+        }
+
+        @keyframes shakeBox {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(5deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            75% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        .boom-effect {
+            font-size: 50px;
+            font-weight: bold;
+            color: #ff4b6e;
+            animation: zoomOut 1s forwards;
+            position: absolute;
+        }
+
+        @keyframes zoomOut {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(5);
+                opacity: 0;
+            }
+        }
+
+        .photo-reveal {
+            max-width: 80%;
+            max-height: 60vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Color Palette */
+        #colorPalette {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .color-btn.active {
+            border: 2px solid #333;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="passwordScreen">
+        <h2>Enter Password ❤️</h2>
+        <input type="password" id="passwordInput" placeholder="Password" />
+        <button id="submitPasswordBtn">Unlock</button>
+    </div>
+
+    <div class="container" style="display: none;">
+        <div class="card" id="questionCard">
+            <h1>Do you love me?</h1>
+            <div class="buttons">
+                <button id="yesBtn">Yes ❤️</button>
+                <button id="noBtn">No 💔</button>
+            </div>
+        </div>
+
+        <div class="hidden" id="videoContainer">
+            <h1>Yay! I knew it! 😍</h1>
+            <div class="video-wrapper">
+                <video id="loveVideo" controls playsinline>
+                    <source src="WhatsApp Video 2026-02-15 at 3.09.25 PM.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- Added class for styling -->
+            <button id="continueBtn" class="hidden">Continue ➡</button>
+            <button id="backBtn" class="hidden">Back</button>
+        </div>
+
+        <!-- Happy Question Section -->
+        <div class="card hidden" id="happyQuestionSection">
+            <h1>Are you happy? 🥰</h1>
+            <div class="buttons">
+                <button id="happyYesBtn">Yes 💖</button>
+                <button id="happyNoBtn">No 😢</button>
+            </div>
+        </div>
+
+        <!-- Surprise Section -->
+        <div class="container hidden" id="surpriseSection"
+            style="display: none; flex-direction: column; align-items: center;">
+            <div id="giftBox">🎁</div>
+            <div class="hidden" id="boomEffect">💥 b7bk ya zozaty awii 💥</div>
+
+            <div id="drawingArea" class="hidden"
+                style="display: none; position: relative; flex-direction: column; align-items: center; width: 100%;">
+                <h2
+                    style="color: #ff4b6e; font-family: 'Dancing Script', cursive; font-size: 2.5rem; margin-bottom: 1rem;">
+                    Please complete the drawing ✏️</h2>
+                <div id="canvasContainer" style="position: relative; display: inline-block;">
+                    <img src="Untitled.png" alt="Surprise Photo" class="photo-reveal" id="surprisePhoto"
+                        style="display: block; max-width: 80vw; max-height: 60vh;">
+                    <canvas id="drawingCanvas"
+                        style="position: absolute; top: 0; left: 0; cursor: crosshair; touch-action: none;"></canvas>
+                </div>
+
+                <div id="colorPalette" class="hidden">
+                    <div class="color-btn active" style="background-color: #ff4b6e;" data-color="#ff4b6e"></div>
+                    <div class="color-btn" style="background-color: #FFC107;" data-color="#FFC107"></div>
+                    <div class="color-btn" style="background-color: #4CAF50;" data-color="#4CAF50"></div>
+                    <div class="color-btn" style="background-color: #2196F3;" data-color="#2196F3"></div>
+                    <div class="color-btn" style="background-color: #9C27B0;" data-color="#9C27B0"></div>
+                    <div class="color-btn" style="background-color: #000000;" data-color="#000000"></div>
+                </div>
+
+                <h1 id="finalMessage" style="margin-top: 20px;">I Love You za2toty! ❤️</h1>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const questionCard = document.getElementById('questionCard');
+            const videoContainer = document.getElementById('videoContainer');
+            const loveVideo = document.getElementById('loveVideo');
+            const backBtn = document.getElementById('backBtn');
+            const passwordScreen = document.getElementById('passwordScreen');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const container = document.querySelector('.container');
+
+            // Password Logic
+            function checkPassword() {
+                const password = passwordInput.value;
+                if (password === '12525') {
+                    passwordScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        passwordScreen.style.display = 'none';
+                        container.style.display = 'flex';
+                    }, 500); // Wait for transition
+                } else {
+                    passwordInput.classList.add('error-shake');
+                    setTimeout(() => {
+                        passwordInput.classList.remove('error-shake');
+                        passwordInput.value = '';
+                    }, 500);
+                }
+            }
+
+            submitPasswordBtn.addEventListener('click', checkPassword);
+
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+
+
+
+            // Move 'No' button on hover
+            noBtn.addEventListener('mouseover', () => {
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            });
+
+            // Also move on click just in case (for mobile mostly, though hover is tricky on mobile)
+            noBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            });
+
+            // Show video on 'Yes' click
+            yesBtn.addEventListener('click', () => {
+                questionCard.style.display = 'none';
+                videoContainer.classList.remove('hidden');
+                videoContainer.style.display = 'flex';
+                // Auto-play the video
+                loveVideo.play().catch(e => console.log("Autoplay prevented:", e));
+            });
+
+            // Back button to reset
+            backBtn.addEventListener('click', () => {
+                videoContainer.style.display = 'none';
+                videoContainer.classList.add('hidden');
+                questionCard.style.display = 'block';
+
+                loveVideo.pause();
+                loveVideo.currentTime = 0; // Stop and reset video
+
+                // Reset No button position
+                noBtn.style.position = 'relative';
+                noBtn.style.left = 'auto';
+                noBtn.style.top = 'auto';
+            });
+
+            // Post-Video Flow
+            const continueBtn = document.getElementById('continueBtn');
+            const happyQuestionSection = document.getElementById('happyQuestionSection');
+            const happyYesBtn = document.getElementById('happyYesBtn');
+            const happyNoBtn = document.getElementById('happyNoBtn');
+            const drawingSection = document.getElementById('drawingSection');
+
+            // Show Continue button when video ends
+            loveVideo.addEventListener('ended', () => {
+                continueBtn.classList.remove('hidden');
+                backBtn.classList.add('hidden'); // Hide back button to focus on flow
+            });
+
+            // Continue to "Are you happy?"
+            continueBtn.addEventListener('click', () => {
+                videoContainer.style.display = 'none';
+                videoContainer.classList.add('hidden');
+                happyQuestionSection.style.display = 'block'; // Ensure it's visible as a block
+                happyQuestionSection.classList.remove('hidden');
+            });
+
+            // Happy "Yes" -> Show Surprise
+            happyYesBtn.addEventListener('click', () => {
+                happyQuestionSection.style.display = 'none';
+
+                const surpriseSection = document.getElementById('surpriseSection');
+                surpriseSection.classList.remove('hidden');
+                surpriseSection.style.display = 'flex';
+
+                const giftBox = document.getElementById('giftBox');
+                const boomEffect = document.getElementById('boomEffect');
+                const surprisePhoto = document.getElementById('surprisePhoto');
+                const finalMessage = document.getElementById('finalMessage');
+
+                // Start shaking
+                giftBox.classList.add('shake');
+
+                // After 2 seconds, boom
+                setTimeout(() => {
+                    giftBox.style.display = 'none';
+                    boomEffect.classList.remove('hidden');
+                    boomEffect.style.display = 'block';
+
+                    // Play boom sound if we had one, but for now just visual
+
+                    // After boom (1s), show text first, then photo
+                    setTimeout(() => {
+                        boomEffect.style.display = 'none';
+                        const drawingArea = document.getElementById('drawingArea');
+                        const canvasContainer = document.getElementById('canvasContainer');
+                        const colorPalette = document.getElementById('colorPalette');
+                        const finalMessage = document.getElementById('finalMessage');
+
+                        // Show drawing area container
+                        drawingArea.style.display = 'flex';
+                        drawingArea.classList.remove('hidden');
+
+                        // Hide internal elements initially for the sequence
+                        // Force display none to override CSS ID/inline styles
+                        canvasContainer.classList.add('hidden');
+                        canvasContainer.style.display = 'none';
+
+                        colorPalette.classList.add('hidden');
+                        colorPalette.style.display = 'none';
+
+                        finalMessage.classList.add('hidden');
+                        finalMessage.style.display = 'none';
+
+                        // After delay, show photo and palette
+                        setTimeout(() => {
+                            canvasContainer.classList.remove('hidden');
+                            canvasContainer.style.display = 'inline-block'; // Restore display
+                            canvasContainer.classList.add('photo-reveal');
+
+                            colorPalette.classList.remove('hidden');
+                            colorPalette.style.display = 'flex'; // Restore display
+                            colorPalette.classList.add('photo-reveal');
+
+                            finalMessage.classList.remove('hidden');
+                            finalMessage.style.display = 'block'; // Restore display
+
+                            // Initialize canvas after image is visible
+                            setTimeout(setupCanvas, 100);
+                        }, 1500);
+
+                    }, 800);
+                }, 2000);
+            });
+
+            // Drawing Logic
+            const drawingCanvas = document.getElementById('drawingCanvas');
+            const ctx = drawingCanvas.getContext('2d');
+            let isDrawing = false;
+            let currentColor = '#ff4b6e';
+
+            // Color Palette Logic
+            const colorBtns = document.querySelectorAll('.color-btn');
+            colorBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all
+                    colorBtns.forEach(b => b.classList.remove('active'));
+                    // Add active to clicked
+                    btn.classList.add('active');
+                    // Set color
+                    currentColor = btn.getAttribute('data-color');
+                    ctx.strokeStyle = currentColor;
+                });
+            });
+
+            function setupCanvas() {
+                const img = document.getElementById('surprisePhoto');
+                // Match canvas size to image size
+                drawingCanvas.width = img.clientWidth;
+                drawingCanvas.height = img.clientHeight;
+
+                // Style settings for drawing
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = 5;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            }
+
+            // Mouse Events
+            drawingCanvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+            });
+
+            drawingCanvas.addEventListener('mousemove', (e) => {
+                if (isDrawing) {
+                    ctx.lineTo(e.offsetX, e.offsetY);
+                    ctx.stroke();
+                }
+            });
+
+            drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
+            drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
+
+            // Touch Events
+            drawingCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                isDrawing = true;
+                const rect = drawingCanvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                ctx.beginPath();
+                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            });
+
+            drawingCanvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (isDrawing) {
+                    const rect = drawingCanvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                    ctx.stroke();
+                }
+            });
+
+            drawingCanvas.addEventListener('touchend', () => isDrawing = false);
+
+
+            // Happy "No" -> Run away logic (Reused)
+            function moveButton(btn) {
+                const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+                btn.style.position = 'absolute';
+                btn.style.left = `${x}px`;
+                btn.style.top = `${y}px`;
+            }
+
+            happyNoBtn.addEventListener('mouseover', () => {
+                moveButton(happyNoBtn);
+                happyNoBtn.innerText = "No 😠";
+            });
+
+            happyNoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                moveButton(happyNoBtn);
+                happyNoBtn.innerText = "No 😠";
+            });
+        });
+    </script>
+</body>
+
+</html>
